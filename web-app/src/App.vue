@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <router-view/>
   </div>
 </template>
@@ -15,5 +15,7 @@ body {
   letter-spacing: 1px;
   background: #f0f2f5 !important;
 }
-
+.ant-btn.ant-btn-primary span{
+  color: white;
+}
 </style>

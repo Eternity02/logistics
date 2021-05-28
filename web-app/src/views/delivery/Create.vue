@@ -28,6 +28,18 @@
               </a-select-option>
             </a-select>
           </a-form-model-item>
+
+          <a-form-model-item label="选择票号" required>
+            <a-select v-model="selectSaleIndex" placeholder="请选择票号">
+              <a-select-option :value="index" v-for="(item, index) in sales" :key="index" :disabled="item.driving">
+                {{ item.commodity }} : {{ item.count }} : {{item.company}}
+                <i class="dis" v-if="item.driving">
+                  <a-icon type="close-circle"/>
+                  正在途中</i>
+              </a-select-option>
+            </a-select>
+          </a-form-model-item>
+
           <a-form-model-item label="预计交货时间" required>
             <a-date-picker
                 v-model="form.time"
@@ -73,6 +85,8 @@
         <p>注意事项： {{ form.care }}</p>
         <p>客户电话： {{ form.phone }}</p>
         <p>客户地址： {{ form.address }}</p>
+        <p>商品名称: {{form.commodity}}</p>
+        <p>商品数量: {{form.count}}</p>
         <p>预计送达： {{ form.time }}</p>
         <a-button type="danger" style="margin-right: 20px" :loading="loading" @click="submit">提交</a-button>
         <a-button @click="current = 0">上一步</a-button>
@@ -112,8 +126,10 @@ export default {
       current: 0,
       selectDriverIndex: 0,
       selectVehicleIndex: 0,
+      selectSaleIndex: 0,
       drivers: [],
       vehicles: [],
+      sales: [],
       form: {
         id: '',
         did: '',
@@ -126,6 +142,8 @@ export default {
         cares: [],
         care: '',
         time: '',
+        commodity: '',
+        count: 0,
         status: 0,
       },
     }
@@ -136,14 +154,19 @@ export default {
       if (res.status) {
         this.drivers = res.data.drivers
         this.vehicles = res.data.vehicles
+        this.sales = res.data.sales
       }
-      console.log(this.drivers)
-      console.log(this.vehicles)
     })
   },
 
   methods: {
     next() {
+      if(this.vehicles[this.selectVehicleIndex].driving||
+              this.sales[this.selectSaleIndex].driving||
+              this.drivers[this.selectDriverIndex].driving){
+        this.$message.error("有事件正在途中")
+        return;
+      }
       let care = ''
       for (let i = 0; i < this.form.cares.length; i++) {
         care += this.form.cares[i] + ", "
@@ -152,7 +175,10 @@ export default {
       this.form.did = this.drivers[this.selectDriverIndex].id
       this.form.number = this.vehicles[this.selectVehicleIndex].number
       this.form.vid = this.vehicles[this.selectVehicleIndex].id
+      this.form.commodity = this.sales[this.selectSaleIndex].commodity
+      this.form.sid = this.sales[this.selectSaleIndex].id
       this.form.care = care
+      this.form.count = this.sales[this.selectSaleIndex].count
       this.current = 1
     },
     submit() {

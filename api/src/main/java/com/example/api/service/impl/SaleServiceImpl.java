@@ -17,7 +17,6 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public Sale save(Sale sale) {
-        sale.setPay(false);
         sale.setCreateAt(DataTimeUtil.getNowTimeString());
         return saleRepository.save(sale);
     }

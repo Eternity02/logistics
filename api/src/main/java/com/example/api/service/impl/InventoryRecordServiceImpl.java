@@ -1,8 +1,10 @@
 package com.example.api.service.impl;
 
+import com.example.api.model.entity.Commodity;
 import com.example.api.model.entity.Inventory;
 import com.example.api.model.entity.InventoryRecord;
 import com.example.api.model.vo.CommodityChartVo;
+import com.example.api.repository.CommodityRepository;
 import com.example.api.repository.InventoryRecordRepository;
 import com.example.api.repository.InventoryRepository;
 import com.example.api.service.InventoryRecordService;
@@ -23,6 +25,9 @@ public class InventoryRecordServiceImpl implements InventoryRecordService {
 
     @Resource
     private InventoryRecordRepository recordRepository;
+
+    @Resource
+    private CommodityRepository commodityRepository;
 
     @Override
     public List<CommodityChartVo> analyzeCommodity(Integer type) {
@@ -56,12 +61,15 @@ public class InventoryRecordServiceImpl implements InventoryRecordService {
     public InventoryRecord out(InventoryRecord record) throws Exception {
         //查找当前商品在该仓库的库存
         Inventory inventory = inventoryRepository.findByWidAndCid(record.getWid(), record.getCid());
+        Commodity commodity = commodityRepository.findByName(record.getName());
         //查询结果为空
         if (inventory == null) throw new Exception("仓库内不存在该商品");
         //比较库存
         if (inventory.getCount() < record.getCount()) throw new Exception("出库失败，库存数量不足");
         inventory.setCount(inventory.getCount() - record.getCount());
+        commodity.setCount(commodity.getCount()-record.getCount());
         inventoryRepository.save(inventory);
+        commodityRepository.save(commodity);
         record.setCreateAt(DataTimeUtil.getNowTimeString());
         record.setType(-1);
         return recordRepository.save(record);
@@ -71,6 +79,8 @@ public class InventoryRecordServiceImpl implements InventoryRecordService {
     public InventoryRecord in(InventoryRecord record) {
         //查找当前商品在该仓库的库存
         Inventory inventory = inventoryRepository.findByWidAndCid(record.getWid(), record.getCid());
+        Commodity commodity = commodityRepository.findByName(record.getName());
+        int count = 0;
         //查询结果为空
         if (inventory == null) {
             //新建该商品库存信息
@@ -81,7 +91,9 @@ public class InventoryRecordServiceImpl implements InventoryRecordService {
             inventory.setName(record.getName());
         }
         inventory.setCount(inventory.getCount() + record.getCount());
+        commodity.setCount(commodity.getCount()+record.getCount());
         inventoryRepository.save(inventory);
+        commodityRepository.save(commodity);
         record.setCreateAt(DataTimeUtil.getNowTimeString());
         record.setType(+1);
         return recordRepository.save(record);

@@ -159,6 +159,16 @@ const columns = [
     scopedSlots: {customRender: 'address'},
   },
   {
+    title: '商品名称',
+    dataIndex: 'commodity',
+    scopedSlots: {customRender: 'commodity'},
+  },
+  {
+    title: '商品数量',
+    dataIndex: 'count',
+    scopedSlots: {customRender: 'count'},
+  },
+  {
     title: '注意事项',
     dataIndex: 'care',
     scopedSlots: {customRender: 'care'},

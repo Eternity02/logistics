@@ -21,7 +21,7 @@
             <a-card-meta
                 :title="(index+1) +'号仓库'"
                 :description="'ID: ' + item.id">
-              <img class="image" slot="avatar" :src="imgList[Math.floor(Math.random() * 3)]"
+              <img class="image" slot="avatar" :src="imgList[getRandomImg]"
                    alt=""/>
             </a-card-meta>
           </a-card>
@@ -35,13 +35,23 @@
         @ok="submit"
         @cancel="visible = false"
     >
-      <a-input v-model="form.principle" addon-before="仓库负责人" style="width: 300px"></a-input>
+      <a-form-model layout="inline" >
+        <a-form-model-item label="仓库负责人">
+          <a-select v-model="form.principle" style="width: 200px" >
+            <a-select-option :value="employee.name" v-for="(employee,index) in employees" :key="index">
+              {{employee.name}}
+            </a-select-option>
+
+          </a-select>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
   </div>
 </template>
 
 <script>
 import {FindAllWarehouse, SaveWarehouse} from "@/api/warehouse";
+import {FindAllEmployee} from "@/api/employee";
 
 export default {
   name: "WareHouse",
@@ -54,14 +64,19 @@ export default {
       imgList: [
         require('../../assets/warehouse0.svg'),
         require('../../assets/warehouse1.svg'),
-        require('../../assets/warehouse2.svg'),]
+        require('../../assets/warehouse2.svg'),],
+      employees: []
     }
   },
 
   mounted() {
     this.loadData()
   },
-
+  computed: {
+      getRandomImg: function (index) {
+        return Math.floor(Math.random() * 3)
+      }
+  },
   methods: {
 
     loadData() {
@@ -71,6 +86,12 @@ export default {
         setTimeout(() => {
           this.spinning = false
         }, 600)
+      })
+      FindAllEmployee().then((res)=>{
+        if(res.status){
+          this.employees = [...res.data]
+          this.form.principle = this.employees[0].name
+        }
       })
     },
 

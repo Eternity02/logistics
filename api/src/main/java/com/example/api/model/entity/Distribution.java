@@ -21,6 +21,15 @@ public class Distribution {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    //销售号id
+    private String sid;
+
+    //商品名
+    private String commodity;
+
+    //商品数量
+    private Integer count;
+
     //司机id
     private String did;
 

@@ -1,12 +1,12 @@
 <template>
   <a-layout-sider
-      :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }"
+      :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }" class="side-menu"
       width="220">
     <div class="logo">
       <img src="../assets/logo.svg" alt="">
       物流管理系统
     </div>
-    <a-menu theme="dark" mode="inline">
+    <a-menu  theme="light" mode="inline">
       <a-sub-menu v-for="(item, index) in menus" :key="index">
         <span slot="title">
           <a-icon :type="item.icon"/>
@@ -98,8 +98,10 @@ export default {
   color: #ffffff;
   letter-spacing: 2px;
 }
-
-.ant-menu {
+.ant-layout-sider{
+  background: white;
+}
+>>> .side-menu {
   letter-spacing: 1px;
 }
 

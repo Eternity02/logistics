@@ -21,6 +21,8 @@ public class Sale {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
 
+    private boolean driving;
+
     private String company;
 
     private String number;

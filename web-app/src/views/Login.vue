@@ -3,7 +3,7 @@
     <div>
       <div class="box-header">
         <img class="logo" src="../assets/logo.svg" alt=""/>
-        <div class="box-header-t">Management</div>
+        <div class="box-header-t"> login </div>
       </div>
       <div class="title">Logistics Management 物流管理系统 - 管理员登录</div>
       <a-tabs @change="tabClick" default-active-key="1" :tabBarStyle="{ textAlign: 'center' }">
@@ -56,7 +56,7 @@
       <a-button :loading="submitLoading" class="submit-btn" type="primary" @click="submitLogin">
         确认登陆
       </a-button>
-      <div class="des">物流管理系统 - Copyright 2021 高元明</div>
+
     </div>
   </div>
 </template>
@@ -146,9 +146,6 @@ body {
   border-bottom: none !important;
 }
 
->>> .ant-btn-primary {
-  border-color: #5a84fd;
-}
 
 .login-box {
   width: 350px;
@@ -160,11 +157,14 @@ body {
 
 .box-header {
   display: flex;
+
 }
 
 .box-header-t {
   font-weight: bolder;
   font-size: 30px;
+  padding-left: 20px;
+  color: black;
 }
 
 .logo {
@@ -206,9 +206,9 @@ body {
 
 .submit-btn {
   letter-spacing: 2px;
-  background: #5a84fd;
   width: 100%;
   height: 45px;
+  color: white;
 }
 
 .des {

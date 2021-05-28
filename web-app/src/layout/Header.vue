@@ -24,15 +24,6 @@
         </div>
       </a-button>
       <a-menu slot="overlay">
-        <a-menu-item>
-          <a-icon class="icon" type="smile"/>
-          个人中心
-        </a-menu-item>
-        <a-menu-item>
-          <a-icon class="icon" type="setting"/>
-          系统设置
-        </a-menu-item>
-        <a-menu-divider/>
         <a-menu-item @click="handleLogout">
           <a-icon class="icon" type="logout"/>
           退出登录
